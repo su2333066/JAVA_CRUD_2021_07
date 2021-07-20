@@ -1,6 +1,7 @@
 package com.sbs.java.crud;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,6 +37,7 @@ public class Main {
 				String body = sc.nextLine();
 				
 				Article article = new Article(id, title, body);
+				article.now = new Date();
 				articles.add(article);
 
 				System.out.printf("%d번글이 생성되었습니다.\n", id);
@@ -54,26 +56,54 @@ public class Main {
 				String[] commandBits = command.split(" ");
 				
 				int id = Integer.parseInt(commandBits[2]);
-				boolean foundArticle = false;
+				Article foundArticle = null;
 				
 				for(int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 					
 					if(article.id == id) {
-						foundArticle = true;
+						foundArticle = article;
 						break;
 					}
 				}
 				
-				if(foundArticle == false) {
+				if(foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 					continue;
 				}
 				else {
 					System.out.printf("%d번 게시물은 존재합니다.\n", id);
+					System.out.println("번호: " + foundArticle.id);
+					System.out.println("날짜: " + foundArticle.now);
+					System.out.println("제목: " + foundArticle.title);
+					System.out.println("내용: " + foundArticle.body);
+					
 					continue;
 				}
 				
+				
+			} else if(command.startsWith("article delete ")) {
+				String[] commandBits = command.split(" ");
+				
+				int id = Integer.parseInt(commandBits[2]);
+				Article foundArticle = null;
+				
+				for(int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+					
+					if(article.id == id) {
+						foundArticle = article;
+						break;
+					}
+				}
+				
+				if(foundArticle == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+					continue;
+				}
+				
+				articles.remove(articles.indexOf(foundArticle));
+				System.out.printf("%d번 게시물울 지웠습니다.\n", id);
 				
 			}
 			else {
@@ -91,6 +121,8 @@ class Article {
 	int id;
 	String title;
 	String body;
+	Date now;
+	
 
 	public Article(int id, String title, String body) {
 		this.id = id;
